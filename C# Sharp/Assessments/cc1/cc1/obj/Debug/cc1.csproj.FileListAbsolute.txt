@@ -1,0 +1,7 @@
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\bin\Debug\cc1.exe.config
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\bin\Debug\cc1.exe
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\bin\Debug\cc1.pdb
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\obj\Debug\cc1.csproj.AssemblyReference.cache
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\obj\Debug\cc1.csproj.CoreCompileInputs.cache
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\obj\Debug\cc1.exe
+C:\Users\santhoshke\Batch_June24\CSharp\Assessments\cc1\cc1\obj\Debug\cc1.pdb
