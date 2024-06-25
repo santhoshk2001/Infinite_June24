@@ -8,7 +8,7 @@ namespace Assignment_4
 {
     class Program2
     {
-        static int CountLetterOccurrences(string str, char letter)
+        static int Count_No_of_Occurrences(string str, char letter)
         {
             int count = 0;
             foreach (char ch in str)
@@ -34,7 +34,7 @@ namespace Assignment_4
                 return;
             }
 
-            int occurrences = CountLetterOccurrences(userString, letterToCount);
+            int occurrences = Count_No_of_Occurrences(userString, letterToCount);
 
             Console.WriteLine($"The letter '{letterToCount}' appears {occurrences} times in the string.");
 

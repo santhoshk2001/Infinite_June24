@@ -27,7 +27,7 @@ namespace Assignment_4
     }
 }
 
-class Program
+class Program1
 {
     static void Main(string[] args)
     {

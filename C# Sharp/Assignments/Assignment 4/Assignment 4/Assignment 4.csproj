@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Assignment_4.Program2</StartupObject>
+    <StartupObject>Assignment_4.Program5</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="Program1.cs" />
     <Compile Include="Program2.cs" />
+    <Compile Include="Program3.cs" />
+    <Compile Include="Program4.cs" />
+    <Compile Include="Program5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
