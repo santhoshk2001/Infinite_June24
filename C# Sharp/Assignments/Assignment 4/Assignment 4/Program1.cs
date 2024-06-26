@@ -6,38 +6,27 @@ using System.Threading.Tasks;
 
 namespace Assignment_4
 {
-    class Person
+    class Program1
     {
-    private string firstName;
-    private string lastName;
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter First Name:");
+            string firstName = Console.ReadLine();
 
-    public Person(string firstName, string lastName)
-    {
-        this.firstName = firstName;
-        this.lastName = lastName;
+            Console.WriteLine("Enter Last Name:");
+            string lastName = Console.ReadLine();
+
+            Display(firstName, lastName);
+
+            Console.Read();
+        }
+
+        static void Display(string firstName, string lastName)
+        {
+            Console.WriteLine(firstName.ToUpper());
+
+            Console.WriteLine(lastName.ToUpper());
+        }
     }
-
-    public static void Display(Person person)
-    {
-        string upperFirstName = person.firstName.ToUpper();
-        string upperLastName = person.lastName.ToUpper();
-
-        Console.WriteLine(upperFirstName);
-        Console.WriteLine(upperLastName);
-    }
-}
-
-class Program1
-{
-    static void Main(string[] args)
-    {
-       
-        Person person = new Person("Santhosh", "Kenchanagoudar");
-
-        Person.Display(person);
-
-        Console.ReadLine();
-    }
-}
 
 }
