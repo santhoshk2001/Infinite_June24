@@ -1,0 +1,7 @@
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\bin\Debug\cc4.exe.config
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\bin\Debug\cc4.exe
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\bin\Debug\cc4.pdb
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\obj\Debug\cc4.csproj.AssemblyReference.cache
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\obj\Debug\cc4.csproj.CoreCompileInputs.cache
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\obj\Debug\cc4.exe
+C:\Users\santhoshke\Infinite_June24\C# Sharp\Assessments\cc4\cc4\obj\Debug\cc4.pdb
