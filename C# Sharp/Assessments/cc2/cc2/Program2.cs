@@ -46,7 +46,6 @@ namespace cc2
                 productList.Add(new Products(productId, productName, price));
             }
 
-            // Sort the products using Bubble Sort
             BubbleSort(productList);
 
             Console.WriteLine("\nSorted Products by Price:");
