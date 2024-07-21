@@ -65,7 +65,7 @@ CREATE TABLE Holidays (
 -- Insert some holiday details
 INSERT INTO Holidays (Holiday_Date, Holiday_Name)
 VALUES 
-    ('2024-08-15', 'Independence Day'),
+    ('2024-07-21', 'Independence Day'),
     ('2024-11-12', 'Diwali'),
     ('2024-12-25', 'Ugadi'),
     ('2025-01-01', 'New Year');
@@ -74,57 +74,50 @@ VALUES
 SELECT * FROM Holidays;
 
 
--- Create or alter the trigger to restrict data manipulation during holidays
-CREATE OR ALTER TRIGGER trgRestrictDataManipulation
-ON EMP
-AFTER INSERT, UPDATE, DELETE
+CREATE OR ALTER TRIGGER RestrictDataManipulationOnHolidays
+ON Emp
+INSTEAD OF INSERT, UPDATE, DELETE
 AS
 BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @Today DATE = CAST(GETDATE() AS DATE);
-    DECLARE @HolidayName VARCHAR(50);
-
-    -- Check if today is a holiday
-    IF EXISTS (SELECT 1 FROM Holidays WHERE Holiday_Date = @Today)
+    DECLARE @IsHoliday BIT
+ 
+    SELECT @IsHoliday = CASE 
+                            WHEN EXISTS (SELECT 1 FROM Holidays WHERE holiday_date = CONVERT(DATE, GETDATE())) THEN 1 
+                            ELSE 0 
+                       END
+ 
+    IF @IsHoliday = 1
     BEGIN
-        -- Get the name of the holiday
-        SELECT @HolidayName = Holiday_Name FROM Holidays WHERE Holiday_Date = @Today;
-
-        -- Display an error message
-        DECLARE @ErrorMessage NVARCHAR(100);
-        SET @ErrorMessage = CONCAT('Due to ', @HolidayName, ', you cannot manipulate data.');
-        RAISERROR(@ErrorMessage, 16, 1);
-
-        -- Rollback the transaction to prevent data manipulation
-        ROLLBACK TRANSACTION;
+        DECLARE @HolidayName VARCHAR(100)
+        SELECT @HolidayName = holiday_name FROM Holidays WHERE holiday_date = CONVERT(DATE, GETDATE())
+ 
+       
+        RAISERROR('Due to %s, you cannot manipulate data.', 16, 1, @HolidayName)
     END
-END;
-
--- Attempting to insert data into the EMP table on Independence Day
--- Set the date to simulate today's date as Independence Day
-DECLARE @Today DATE = '2024-08-15';
-
--- Attempt to insert a record into the EMP table
-BEGIN TRY
-    -- Start a transaction explicitly for testing
-    BEGIN TRANSACTION;
-
-    -- Insert statement that would typically be executed
-    INSERT INTO EMP (empno, ename, sal)
-    VALUES (102, 'John', 70000);
-
-    -- If the insert operation succeeds, commit the transaction
-    COMMIT TRANSACTION;
-
-    -- If no error is raised, the insert was successful
-    PRINT 'Insert successful.';
-END TRY
-BEGIN CATCH
-    -- If an error occurs during the insert operation (e.g., due to holiday trigger)
-    -- Print the error message
-    PRINT ERROR_MESSAGE();
-
-    -- Rollback the transaction to prevent changes
-    ROLLBACK TRANSACTION;
-END CATCH;
+    ELSE
+    BEGIN
+        DECLARE @DateToCheck DATE = '2024-07-21'
+ 
+        IF EXISTS (
+            SELECT 1 
+            FROM Holidays 
+            WHERE holiday_date = @DateToCheck
+        )
+        BEGIN
+            PRINT 'Insertion is not allowed on holidays.'
+        END
+        ELSE
+        BEGIN
+            PRINT 'Insertion is allowed on non-holiday dates.'
+ 
+            
+             INSERT INTO EMP (empno, ename, sal) VALUES (8000, 'sanju', 3000)
+ 
+            --UPDATE EMP SET ename = 'Santu' WHERE ename = 'john'
+ 
+            --DELETE FROM EMP WHERE empno = 7521
+        END
+    END
+END
+ 
+Select * from EMP
