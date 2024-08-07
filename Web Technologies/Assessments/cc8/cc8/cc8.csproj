@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4C56CEA8-1504-4737-9BB5-9481727C7FFD}</ProjectGuid>
+    <ProjectGuid>{7D8F2CC1-E052-4109-A770-36F15F3E0015}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Web_cc7</RootNamespace>
-    <AssemblyName>Web_cc7</AssemblyName>
+    <RootNamespace>cc8</RootNamespace>
+    <AssemblyName>cc8</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -48,10 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="HTMLPage1.html" />
-    <Content Include="HTMLPage2.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
