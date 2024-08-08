@@ -650,27 +650,76 @@ namespace RailWay
         {
             Console.Clear();
             Console.Write("Enter Train Number to Delete: ");
-            var tno = int.Parse(Console.ReadLine());
-
-            var query = "DELETE FROM Trains WHERE Tno = @Tno";
-            var parameters = new[]
+            if (!int.TryParse(Console.ReadLine(), out int tno))
             {
-                new SqlParameter("@Tno", tno)
-            };
+                Console.WriteLine("Invalid Train Number.");
+                Console.WriteLine("Press Enter to continue.");
+                Console.ReadLine();
+                return;
+            }
+
+            var deleteCancellationsQuery = "DELETE FROM Cancellations WHERE BookingId IN (SELECT BookingId FROM Bookings WHERE Tno = @Tno)";
+            var deleteBookingsQuery = "DELETE FROM Bookings WHERE Tno = @Tno";
+            var deleteTrainQuery = "DELETE FROM Trains WHERE Tno = @Tno";
 
             try
             {
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
-                Console.WriteLine("Train deleted successfully.");
+                using (var connection = new SqlConnection(DatabaseHelper.GetConnectionString()))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Delete cancellations related to the bookings of the train
+                            using (var deleteCancellationsCommand = new SqlCommand(deleteCancellationsQuery, connection, transaction))
+                            {
+                                deleteCancellationsCommand.Parameters.Add(new SqlParameter("@Tno", tno));
+                                int rowsAffectedCancellations = deleteCancellationsCommand.ExecuteNonQuery();
+                                Console.WriteLine($"{rowsAffectedCancellations} cancellation(s) deleted.");
+                            }
+
+                            // Delete bookings
+                            using (var deleteBookingsCommand = new SqlCommand(deleteBookingsQuery, connection, transaction))
+                            {
+                                deleteBookingsCommand.Parameters.Add(new SqlParameter("@Tno", tno));
+                                int rowsAffectedBookings = deleteBookingsCommand.ExecuteNonQuery();
+                                Console.WriteLine($"{rowsAffectedBookings} booking(s) deleted.");
+                            }
+
+                            // Delete train
+                            using (var deleteTrainCommand = new SqlCommand(deleteTrainQuery, connection, transaction))
+                            {
+                                deleteTrainCommand.Parameters.Add(new SqlParameter("@Tno", tno));
+                                int rowsAffectedTrain = deleteTrainCommand.ExecuteNonQuery();
+                                Console.WriteLine($"{rowsAffectedTrain} train(s) deleted.");
+                            }
+
+                            // Commit transaction
+                            transaction.Commit();
+
+                            Console.WriteLine("Train deleted successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback transaction on error
+                            transaction.Rollback();
+                            Console.WriteLine($"Error during transaction: {ex.Message}");
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Database connection error: {ex.Message}");
             }
 
             Console.WriteLine("Press Enter to continue.");
             Console.ReadLine();
         }
+
+
+
 
         private static void ViewAllBookings()
         {
@@ -763,62 +812,106 @@ namespace RailWay
         {
             Console.Clear();
             Console.Write("Enter User ID to Delete: ");
-            var userId = int.Parse(Console.ReadLine());
-
-            var query = "DELETE FROM Users WHERE UserId = @UserId";
-            var parameters = new[]
+            if (!int.TryParse(Console.ReadLine(), out int userId))
             {
-                new SqlParameter("@UserId", userId)
-            };
+                Console.WriteLine("Invalid User ID.");
+                Console.WriteLine("Press Enter to continue.");
+                Console.ReadLine();
+                return;
+            }
+
+            var deleteBookingsQuery = "DELETE FROM Bookings WHERE UserId = @UserId";
+            var deleteUserQuery = "DELETE FROM Users WHERE UserId = @UserId";
 
             try
             {
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
-                Console.WriteLine("User deleted successfully.");
+                using (var connection = new SqlConnection(DatabaseHelper.connectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Delete bookings
+                            using (var deleteBookingsCommand = new SqlCommand(deleteBookingsQuery, connection, transaction))
+                            {
+                                // Create a new parameter instance for this command
+                                deleteBookingsCommand.Parameters.Add(new SqlParameter("@UserId", userId));
+                                int rowsAffectedBookings = deleteBookingsCommand.ExecuteNonQuery();
+                                Console.WriteLine($"{rowsAffectedBookings} booking(s) deleted.");
+                            }
+
+                            // Delete user
+                            using (var deleteUserCommand = new SqlCommand(deleteUserQuery, connection, transaction))
+                            {
+                                // Create a new parameter instance for this command
+                                deleteUserCommand.Parameters.Add(new SqlParameter("@UserId", userId));
+                                int rowsAffectedUser = deleteUserCommand.ExecuteNonQuery();
+                                Console.WriteLine($"{rowsAffectedUser} user(s) deleted.");
+                            }
+
+                            // Commit transaction
+                            transaction.Commit();
+
+                            Console.WriteLine("User deleted successfully.");
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback transaction on error
+                            transaction.Rollback();
+                            Console.WriteLine($"Error during transaction: {ex.Message}");
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Database connection error: {ex.Message}");
             }
 
             Console.WriteLine("Press Enter to continue.");
             Console.ReadLine();
         }
-    }
 
-    public static class DatabaseHelper
-    {
-        private static string connectionString = @"data source=ICS-LT-17YRQ73\SQLEXPRESS; initial catalog=RailwayDB;" + "user id=sa; password=santu2001;";
-
-        public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
+        public static class DatabaseHelper
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                if (parameters != null)
-                {
-                    command.Parameters.AddRange(parameters);
-                }
+            public static string connectionString = @"data source=ICS-LT-17YRQ73\SQLEXPRESS; initial catalog=RailwayDB;" + "user id=sa; password=santu2001;";
 
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
-                return table;
+            public static string GetConnectionString()
+            {
+                return connectionString;
             }
-        }
 
-        public static void ExecuteNonQuery(string query, SqlParameter[] parameters = null)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
             {
-                SqlCommand command = new SqlCommand(query, connection);
-                if (parameters != null)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    command.Parameters.AddRange(parameters);
-                }
+                    SqlCommand command = new SqlCommand(query, connection);
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
 
-                connection.Open();
-                command.ExecuteNonQuery();
+                    SqlDataAdapter adapter = new SqlDataAdapter(command);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    return table;
+                }
+            }
+
+            public static void ExecuteNonQuery(string query, SqlParameter[] parameters = null)
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
