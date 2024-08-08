@@ -71,3 +71,5 @@ select * from Admins
 select * from Trains
 select * from Bookings
 select * from Cancellations
+
+delete from Users where userId=4
