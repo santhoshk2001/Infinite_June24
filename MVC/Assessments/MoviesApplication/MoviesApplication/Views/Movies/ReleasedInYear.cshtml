@@ -1,0 +1,41 @@
+﻿
+<!--@{
+    ViewBag.Title = "ReleasedInYear";
+}
+
+<h2>ReleasedInYear</h2>-->
+
+@model IEnumerable<MoviesApplication.Models.Movie>
+
+@{ ViewBag.Title = "Movies Released in Year"; }
+
+<h2>Movies Released in @ViewBag.Year</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Mid</th>
+            <th>Moviename</th>
+            <th>Date of Release</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+<tr>
+    <td>@item.Mid</td>
+    <td>@item.Moviename</td>
+    <td>@item.DateofRelease.ToShortDateString()</td>
+    <td>
+        @Html.ActionLink("Details", "Details", new { id = item.Mid }) |
+        @Html.ActionLink("Edit", "Edit", new { id = item.Mid }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Mid })
+    </td>
+</tr>}
+    </tbody>
+</table>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

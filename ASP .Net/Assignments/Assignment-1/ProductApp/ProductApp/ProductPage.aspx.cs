@@ -9,7 +9,7 @@ namespace ProductApp
         private Dictionary<string, (string ImageUrl, decimal Price)> products = new Dictionary<string, (string, decimal)>
         {
             { "Laptop", ("~/Images/laptop.jpg", 250000) },
-            { "Smartphone", ("~/Images/smartphone.jpg", 150000m) },
+            { "Smartphone", ("~/Images/smartphone.jpg", 150000) },
             { "Tablet", ("~/Images/tablet.jpg", 100000) }
         };
 
